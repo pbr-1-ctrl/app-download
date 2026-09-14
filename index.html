@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title></title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<script>
+(function () {
+  const IOS_URL =
+    "https://apps.apple.com/th/app/wm-express/id6476185003?l=th";
+
+  const ANDROID_URL =
+    "https://play.google.com/store/apps/details?id=com.kemkmp.khmgkxb";
+
+  const ua = navigator.userAgent || "";
+  const platform = navigator.platform || "";
+
+  const isAndroid = /Android/i.test(ua);
+
+  const isIOS =
+    /iPhone|iPad|iPod/i.test(ua) ||
+    (
+      platform === "MacIntel" &&
+      navigator.maxTouchPoints > 1
+    );
+
+  if (isAndroid) {
+    window.location.replace(ANDROID_URL);
+    return;
+  }
+
+  if (isIOS) {
+    window.location.replace(IOS_URL);
+    return;
+  }
+
+  // 非 iOS / Android 设备保持空白，不显示任何界面。
+})();
+</script>
+</body>
+</html>
