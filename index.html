@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b2e59" />
+  <title>WM Express - 下载应用</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      background: linear-gradient(180deg, #0b2e59 0%, #164b82 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(440px, 100%);
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 24px;
+      padding: 34px 24px;
+      text-align: center;
+      box-shadow: 0 16px 50px rgba(0,0,0,.20);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 30px;
+      line-height: 1.25;
+    }
+
+    .desc {
+      margin: 0 0 28px;
+      opacity: .9;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .status {
+      min-height: 24px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      opacity: .9;
+    }
+
+    .buttons {
+      display: grid;
+      gap: 12px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 700;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .btn:active {
+      transform: scale(.98);
+    }
+
+    .ios {
+      background: #fff;
+      color: #111;
+    }
+
+    .android {
+      background: #f4c542;
+      color: #10253f;
+    }
+
+    .small {
+      margin-top: 22px;
+      font-size: 12px;
+      opacity: .7;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <h1>WM Express</h1>
+    <p class="desc">
+      正在识别您的设备，并前往对应的应用商店。
+    </p>
+
+    <div id="status" class="status">正在识别设备…</div>
+
+    <div class="buttons">
+      <a
+        class="btn ios"
+        href="https://apps.apple.com/th/app/wm-express/id6476185003?l=th"
+        rel="noopener"
+      >
+        在 App Store 下载
+      </a>
+
+      <a
+        class="btn android"
+        href="https://play.google.com/store/apps/details?id=com.kemkmp.khmgkxb"
+        rel="noopener"
+      >
+        在 Google Play 下载
+      </a>
+    </div>
+
+    <div class="small">
+      如果没有自动跳转，请手动选择对应的应用商店。
+    </div>
+  </main>
+
+  <script>
+    const IOS_URL =
+      "https://apps.apple.com/th/app/wm-express/id6476185003?l=th";
+
+    const ANDROID_URL =
+      "https://play.google.com/store/apps/details?id=com.kemkmp.khmgkxb";
+
+    const statusEl = document.getElementById("status");
+
+    function detectDevice() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera || "";
+      const platform = navigator.platform || "";
+
+      // Android
+      const isAndroid = /android/i.test(ua);
+
+      // iPhone / iPod / traditional iPad user agents
+      const isIOSUserAgent = /iPad|iPhone|iPod/i.test(ua);
+
+      // Newer iPadOS can report itself as Macintosh.
+      // MacIntel + multiple touch points is a common way to identify iPadOS.
+      const isIPadOS =
+        platform === "MacIntel" &&
+        typeof navigator.maxTouchPoints === "number" &&
+        navigator.maxTouchPoints > 1;
+
+      if (isAndroid) return "android";
+      if (isIOSUserAgent || isIPadOS) return "ios";
+
+      return "other";
+    }
+
+    function redirectToStore() {
+      const device = detectDevice();
+
+      if (device === "ios") {
+        statusEl.textContent = "已识别为 iPhone / iPad，正在打开 App Store…";
+        setTimeout(() => {
+          window.location.replace(IOS_URL);
+        }, 500);
+        return;
+      }
+
+      if (device === "android") {
+        statusEl.textContent = "已识别为 Android，正在打开 Google Play…";
+        setTimeout(() => {
+          window.location.replace(ANDROID_URL);
+        }, 500);
+        return;
+      }
+
+      statusEl.textContent =
+        "未识别到手机系统，请手动选择 App Store 或 Google Play。";
+    }
+
+    window.addEventListener("DOMContentLoaded", redirectToStore);
+  </script>
+</body>
+</html>
